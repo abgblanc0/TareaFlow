@@ -18,7 +18,7 @@ class BoardFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => $this->faker->sentece(3),
+            'title' => $this->faker->sentence(3),
             'description' => $this->faker->paragraph(),
             'user_id' => User::factory(),
         ];
