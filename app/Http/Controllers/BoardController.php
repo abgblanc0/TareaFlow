@@ -4,15 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\Board;
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class BoardController extends Controller
 {
+    use AuthorizesRequests;
     /**
-     * Display a listing of the resource.
+     * Muestra todos los boards del usuario
      */
     public function index()
     {
-        //
+        $user = auth()->user();
+        $boards = $user->boards()->get();
+        return response()->json($boards);
     }
 
     /**
@@ -28,7 +32,13 @@ class BoardController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+
+        $board = $request->user()->boards()->create($data);
+        return response()->json($board, 201);
     }
 
     /**
@@ -36,7 +46,8 @@ class BoardController extends Controller
      */
     public function show(Board $board)
     {
-        //
+        $this->authorize('view', $board);
+        return response()->json($board);
     }
 
     /**
@@ -52,7 +63,14 @@ class BoardController extends Controller
      */
     public function update(Request $request, Board $board)
     {
-        //
+        $this->authorize('update', $board);
+        $data = $request->validate([
+            'title' => 'string|max:255',
+            'description' => 'nullable|string',
+        ]);
+
+        $board->update($data);
+        return response()->json($board);
     }
 
     /**
@@ -60,6 +78,8 @@ class BoardController extends Controller
      */
     public function destroy(Board $board)
     {
-        //
+        $this->authorize('delete', $board);
+        $board->delete();
+        return response()->json(null,204);
     }
 }

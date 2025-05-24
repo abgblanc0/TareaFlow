@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
+use App\Models\TaskList;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -10,9 +11,10 @@ class TaskController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(TaskList $taskList)
     {
-        //
+        $tasks = $taskList->tasks()->get();
+        return response()->json($tasks);
     }
 
     /**
@@ -26,9 +28,15 @@ class TaskController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, TaskList $taskList)
     {
-        //
+        $data = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+
+        $task = $taskList->tasks()->create($data);
+        return response()->json($task, 201);
     }
 
     /**
@@ -36,7 +44,7 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        //
+        return response()->json($task);
     }
 
     /**
@@ -52,7 +60,13 @@ class TaskController extends Controller
      */
     public function update(Request $request, Task $task)
     {
-        //
+        $data = $request->validate([
+            'title'=> 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+
+        $task->update($data);
+        return response()->json($task);
     }
 
     /**
@@ -60,6 +74,7 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        //
+        $task->delete();
+        return response()->json(null,204);
     }
 }

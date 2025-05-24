@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
+use App\Models\Task;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
@@ -10,9 +11,10 @@ class CommentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Task $task)
     {
-        //
+        $comments = $task->comments()->get();
+        return response()->json($comments);
     }
 
     /**
@@ -26,9 +28,11 @@ class CommentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, Task $task)
     {
-        //
+        $data = $request->validate(['content' => 'required|string']);
+        $comment = $task->comments()->create($data);
+        return response()->json($comment, 201);
     }
 
     /**
@@ -36,7 +40,7 @@ class CommentController extends Controller
      */
     public function show(Comment $comment)
     {
-        //
+        return response()->json($comment);
     }
 
     /**
@@ -52,7 +56,9 @@ class CommentController extends Controller
      */
     public function update(Request $request, Comment $comment)
     {
-        //
+        $data = $request->validate(['content'=> 'required|string']);
+        $comment->update($data);
+        return response()->json($comment);
     }
 
     /**
@@ -60,6 +66,7 @@ class CommentController extends Controller
      */
     public function destroy(Comment $comment)
     {
-        //
+        $comment->delete();
+        return response()->json(null,204);
     }
 }
