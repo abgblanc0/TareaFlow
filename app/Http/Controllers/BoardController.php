@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Board;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Inertia\Inertia;
 
 class BoardController extends Controller
 {
@@ -16,7 +17,10 @@ class BoardController extends Controller
     {
         $user = auth()->user();
         $boards = $user->boards()->get();
-        return response()->json($boards);
+
+        return Inertia::render('Boards/Index', [
+            'boards' => $boards,
+        ]);
     }
 
     /**
@@ -37,8 +41,8 @@ class BoardController extends Controller
             'description' => 'nullable|string',
         ]);
 
-        $board = $request->user()->boards()->create($data);
-        return response()->json($board, 201);
+        $request->user()->boards()->create($data);
+        return redirect()->route('boards');
     }
 
     /**
@@ -47,7 +51,10 @@ class BoardController extends Controller
     public function show(Board $board)
     {
         $this->authorize('view', $board);
-        return response()->json($board);
+        $board->load('lists.tasks');
+        return Inertia::render('Boards/Show', [
+            'board'=> $board,
+        ]);
     }
 
     /**
@@ -80,6 +87,6 @@ class BoardController extends Controller
     {
         $this->authorize('delete', $board);
         $board->delete();
-        return response()->json(null,204);
+        return redirect()->route('boards');
     }
 }

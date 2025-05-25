@@ -35,8 +35,8 @@ class TaskController extends Controller
             'description' => 'nullable|string',
         ]);
 
-        $task = $taskList->tasks()->create($data);
-        return response()->json($task, 201);
+        $taskList->tasks()->create($data);
+        return redirect()->back()->with('success', 'Tarea creada');
     }
 
     /**
@@ -61,12 +61,15 @@ class TaskController extends Controller
     public function update(Request $request, Task $task)
     {
         $data = $request->validate([
-            'title'=> 'required|string|max:255',
+            'title'=> 'nullable|string|max:255',
             'description' => 'nullable|string',
+            'done' => 'nullable|boolean',
         ]);
 
         $task->update($data);
-        return response()->json($task);
+
+        return redirect()->back();
+
     }
 
     /**
@@ -75,6 +78,6 @@ class TaskController extends Controller
     public function destroy(Task $task)
     {
         $task->delete();
-        return response()->json(null,204);
+        return redirect()->back();
     }
 }

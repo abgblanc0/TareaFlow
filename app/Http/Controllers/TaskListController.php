@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\TaskList;
 use App\Models\Board;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class TaskListController extends Controller
 {
@@ -14,7 +15,9 @@ class TaskListController extends Controller
     public function index(Board $board)
     {
         $lists = $board->lists()->get();
-        return response()->json($lists);
+        return Inertia::render('Lists/Index', [
+            'lists' => $lists,
+        ]);
     }
 
     /**
@@ -34,8 +37,10 @@ class TaskListController extends Controller
             'title' => 'required|string|max:255',
         ]);
 
-        $list = $board->lists()->create($data);
-        return response()->json($list, 201);
+        // Asignamos el board_id automáticamente
+        $board->lists()->create($data);
+
+        return redirect()->back()->with('success', 'Lista creada');
     }
 
     /**
@@ -73,6 +78,6 @@ class TaskListController extends Controller
     public function destroy(TaskList $taskList)
     {
         $taskList->delete();
-        return response()->json(null,204);
+        return redirect()->back()->with('success', 'Lista eliminada');
     }
 }
