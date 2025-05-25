@@ -19,7 +19,7 @@ class TaskFactory extends Factory
     {
         return [
             'title' => $this->faker->sentence(3),
-            'description' => $this->faker->paragraph(),
+            'description' => $this->faker->sentence(5),
             'task_list_id' => Task::factory(),
         ];
     }
