@@ -41,3 +41,35 @@ export interface User {
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
 }
+
+export interface Board {
+    id: number;
+    title: string;
+    description: string;
+    user: User;
+    lists: List[];
+    created_at: string;
+    updated_at: string;
+    [key: string]: unknown;
+}
+
+export interface List {
+    id: number;
+    title: string;
+    board: Board;
+    tasks: Task[];
+    created_at: string;
+    updated_at: string;
+    [key: string]: unknown;
+}
+
+export interface Task {
+    id: number;
+    title: string;
+    description: string;
+    list: List;
+    created_at: string;
+    updated_at: string;
+    done: boolean;
+    [key: string]: unknown;
+}
