@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+echo "Node dependencies"
+npm install && npm run build
+
 echo "Running composer"
 composer install --no-dev --working-dir=/var/www/html
 
