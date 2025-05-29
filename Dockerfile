@@ -6,8 +6,8 @@ COPY . /var/www/html
 # Instala Node.js y npm
 RUN apk add --no-cache nodejs npm
 
-# Instala dependencias de Composer
-RUN composer install --optimize-autoloader --no-dev
+# Instala dependencias de Composer, incluyendo las de desarrollo
+RUN composer install --optimize-autoloader --working-dir=/var/www/html
 
 # Instala dependencias de npm y construye assets de Vite
 WORKDIR /var/www/html
@@ -24,9 +24,9 @@ ENV PHP_ERRORS_STDERR 1
 ENV RUN_SCRIPTS 1
 ENV REAL_IP_HEADER 1
 
-# Laravel config
-ENV APP_ENV production
-ENV APP_DEBUG false
+# Laravel config para entorno de desarrollo/prueba
+ENV APP_ENV local
+ENV APP_DEBUG true
 ENV LOG_CHANNEL stderr
 
 # Allow composer to run as root
