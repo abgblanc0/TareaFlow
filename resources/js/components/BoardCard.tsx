@@ -17,13 +17,12 @@ export default function BoardCard({ board }: { board: Board }) {
   return (
     <div
       onClick={handleClick}
-      className="bg-white hover:bg-gray-50 cursor-pointer p-4 rounded-lg shadow-sm border relative transition-all"
+      className="bg-gray-800 cursor-pointer p-4 rounded-lg w-64 h-40 flex-col flex justify-between"
     >
-      <h3 className="text-lg font-semibold text-gray-800 mb-2">{board.title}</h3>
-
+      <h3 className="text-lg font-semibold mb-2">{board.title}</h3>
       <button
         onClick={handleDelete}
-        className="absolute top-2 right-2 text-gray-400 hover:text-red-600"
+        className="text-gray-400 hover:text-red-600"
       >
         <Trash2 size={18} />
       </button>

@@ -16,26 +16,25 @@ export default function Index() {
     const [showAddModal, setShowAddModal] = useState(false);
 
     const { boards } = usePage<{ boards: Board[] }>().props;
-    console.log(boards);
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Mis tableros" />
 
-            <div className='grid grid-cols-3 gap-4'>
-                {boards.length === 0 && <p>No tienes tableros aún.</p>}
-                {boards.map((board) => (
-                    <BoardCard key={board.id} board={board} />
-                ))}
+            <div className='m-5'>
+                <div className='flex gap-4 flex-wrap'>
+                    {boards.length === 0 && <p>No tienes tableros aún.</p>}
+                    {boards.map((board) => (
+                        <BoardCard key={board.id} board={board} />
+                    ))}
+                </div>
+                <button
+                    onClick={() => setShowAddModal(true)}
+                    className=" hover:bg-green-700 text-white font-bold py-2 px-4 rounded w-1/12 mt-10 hover:cursor-pointer"
+                >
+                    Crear tablero
+                </button>
+                {showAddModal && <BoardForm onClose={() => setShowAddModal(false)} />}
             </div>
-
-            <button
-                onClick={() => setShowAddModal(true)}
-                className=" hover:bg-green-700 text-white font-bold py-2 px-4 rounded w-1/12"
-            >
-                Crear tablero
-            </button>
-
-            {showAddModal && <BoardForm onClose={() => setShowAddModal(false)} />}
         </AppLayout>
     );
 }

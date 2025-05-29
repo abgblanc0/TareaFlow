@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\TaskListController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -38,6 +39,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('{taskList}/tasks', [TaskController::class, 'store'])->name('tasks.store');
 });
 
+
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin/users', [AdminUserController::class, 'index'])->name('admin.users');
+    Route::delete('admin/users/{user}', [AdminUserController::class, 'destroy'])->name('admin.users.destroy');
+});
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

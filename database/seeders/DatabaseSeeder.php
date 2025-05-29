@@ -20,7 +20,12 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
             'password'=> bcrypt('password'),
         ]);
-
+        User::factory()->create([
+            'name' => 'admin',
+            'email' => 'admin@admin.com',
+            'password'=> bcrypt('admin'),
+            'is_admin' => true
+        ]);
         $this->call(BoardSeeder::class);
     }
 }
