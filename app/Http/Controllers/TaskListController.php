@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\TaskList;
+use App\Models\Task;
 use App\Models\Board;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -65,7 +66,7 @@ class TaskListController extends Controller
     public function update(Request $request, TaskList $taskList)
     {
         $data = $request->validate([
-            'title'=> 'required|string|max:255',
+            'title' => 'required|string|max:255',
         ]);
 
         $taskList->update($data);
@@ -80,4 +81,17 @@ class TaskListController extends Controller
         $taskList->delete();
         return redirect()->back()->with('success', 'Lista eliminada');
     }
+    public function reorder(Request $request, TaskList $taskList)
+    {
+        foreach ($request->tasks as $taskData) {
+            $task = $taskList->tasks()->find($taskData['id']);
+            if ($task) {
+                $task->update(['position' => $taskData['position']]);
+            }
+        }
+
+        return redirect()->back()->with('success', 'Lista reordenada');
+    }
+
+
 }

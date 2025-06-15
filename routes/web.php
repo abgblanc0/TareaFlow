@@ -11,8 +11,8 @@ Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');
 
-Route::get('/sendprop',function(){
-    return Inertia::render('tst',["test"=>'ayudaa']);
+Route::get('/sendprop', function () {
+    return Inertia::render('tst', ["test" => 'ayudaa']);
 })->name('sendprop');
 
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -27,16 +27,20 @@ Route::middleware(['auth'])->group(function () {
     Route::get('boards', [BoardController::class, 'index'])->name('boards');
     Route::get('boards/{board}', [BoardController::class, 'show'])->name('boards.show');
     Route::post('boards', [BoardController::class, 'store'])->name('boards.store');
-    Route::delete('boards/{board}', [BoardController::class,'destroy'])->name('boards.destroy');
+    Route::delete('boards/{board}', [BoardController::class, 'destroy'])->name('boards.destroy');
 
     // Ruta de listas
     Route::post('{board}/lists', [TaskListController::class, 'store'])->name('lists.store');
     Route::delete('lists/{taskList}', [TaskListController::class, 'destroy'])->name('lists.destroy');
+    Route::put('lists/{taskList}/reorder', [TaskListController::class, 'reorder'])->name('lists.reorder');
+
+
 
     // Ruta de tareas
     Route::put('tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
     Route::delete('tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
     Route::post('{taskList}/tasks', [TaskController::class, 'store'])->name('tasks.store');
+    Route::put('tasks/{task}/move', [TaskController::class, 'move'])->name('tasks.move');
 });
 
 
@@ -45,5 +49,5 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::delete('admin/users/{user}', [AdminUserController::class, 'destroy'])->name('admin.users.destroy');
 });
 
-require __DIR__.'/settings.php';
-require __DIR__.'/auth.php';
+require __DIR__ . '/settings.php';
+require __DIR__ . '/auth.php';

@@ -1,24 +1,68 @@
 import { List } from '@/types';
-import TaskItem from './TaskItem';
-import { Trash2 } from 'lucide-react';
+import {
+  DndContext,
+  closestCenter,
+  useSensor,
+  useSensors,
+  PointerSensor,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  verticalListSortingStrategy,
+  useSortable,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+import { useEffect, useState } from 'react';
 import { router } from '@inertiajs/react';
-import { useState } from 'react';
+import { Trash2 } from 'lucide-react';
 import TaskForm from './TaskForm';
+import TaskItem from './TaskItem';
 
 export default function ListCard({ list }: { list: List }) {
   const [showAddModal, setShowAddModal] = useState(false);
+  const [tasks, setTasks] = useState(list.tasks); // local state
+
+  useEffect(() => {
+    setTasks(list.tasks);   // se dispara cada vez que cambian las props
+  }, [list.tasks]);
+
+  const sensors = useSensors(useSensor(PointerSensor));
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    const oldIndex = tasks.findIndex((t) => t.id === active.id);
+    const newIndex = tasks.findIndex((t) => t.id === over.id);
+
+    const updated = arrayMove(tasks, oldIndex, newIndex);
+    setTasks(updated);
+
+    console.log(updated);
+    router.put(route('lists.reorder', { taskList: list.id }), {
+      tasks: updated.map((t, i) => ({ id: t.id, position: i }))
+    });
+  };
 
   return (
     <div className="bg-zinc-800 p-4 rounded-lg shadow w-64 flex flex-col h-full">
       <h2 className="font-semibold text-lg mb-1">{list.title}</h2>
-      <div className="flex flex-col gap-2 flex-grow">
-        {list.tasks.length === 0 && (
-          <p className="text-sm text-gray-500">No hay tareas</p>
-        )}
-        {list.tasks.map((task) => (
-          <TaskItem key={task.id} task={task} />
-        ))}
-      </div>
+
+      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+        <SortableContext items={tasks.map((t) => t.id)} strategy={verticalListSortingStrategy} id={list.id.toString()}>
+          <div className="flex flex-col gap-2 flex-grow">
+            {tasks.length === 0 && (
+              <p className="text-sm text-gray-500">No hay tareas</p>
+            )}
+            {tasks.map((task) => (
+              <TaskItem key={task.id} task={task} />
+            ))}
+          </div>
+        </SortableContext>
+      </DndContext>
+
       <div className='flex justify-between mt-2'>
         <button
           className='w-6 h-6 border rounded-full hover:text-green-500 cursor-pointer'
@@ -32,8 +76,7 @@ export default function ListCard({ list }: { list: List }) {
         </button>
       </div>
 
-      {showAddModal && <TaskForm task_list_id={list.id} onClose={() => setShowAddModal(false)} />}
+      {showAddModal && <TaskForm list={list} onClose={() => setShowAddModal(false)} />}
     </div>
   );
-
 }

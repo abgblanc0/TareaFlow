@@ -1,27 +1,31 @@
+import { List } from "@/types";
 import { router, useForm } from "@inertiajs/react";
 
 interface TaskFormProps {
-  task_list_id: number;
+  list: List;
   onClose: () => void;
 }
 
 
-export default function TaskForm({ onClose, task_list_id }: TaskFormProps) {
+export default function TaskForm({ onClose, list }: TaskFormProps) {
   const { data, setData, processing, errors, reset } = useForm({
     title: '',
   });
 
   const submit = (e: React.FormEvent) => {
-    console.log(task_list_id);
     e.preventDefault();
-    router.post(route('tasks.store', { taskList: task_list_id }), { title: data.title });
+    console.log(list.tasks.length);
+    router.post(route('tasks.store', { taskList: list.id }), {
+      title: data.title,
+      position: list.tasks.length,
+    });
     reset();
     onClose();
   };
 
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <form
         onSubmit={submit}
         className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md space-y-4 text-gray-800"

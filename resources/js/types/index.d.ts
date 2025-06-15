@@ -71,5 +71,6 @@ export interface Task {
     created_at: string;
     updated_at: string;
     done: boolean;
+    position: number;
     [key: string]: unknown;
 }
