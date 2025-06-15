@@ -42,7 +42,7 @@ export default function Description({ task, onSaved }: Props) {
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder="Añade una descripción..."
-          className="w-full resize-none border-gray-300 p-2 placeholder-gray-400 border rounded-lg"
+          className="w-full resize-none p-2 placeholder-gray-400 border rounded-lg"
           rows={4}
         />
         <div className="flex justify-end gap-2">
@@ -51,14 +51,14 @@ export default function Description({ task, onSaved }: Props) {
               setEditing(false);
               setText(task.description ?? '');
             }}
-            className="hover:bg-red-500 hover:cursor-pointer"
+            className="hover:bg-red-500 hover:cursor-pointer mt-2 p-2 rounded"
             disabled={processing}
           >
             Cancelar
           </button>
           <button
             onClick={save}
-            className="px-3 py-1 disabled:opacity-50 hover:cursor-pointer hover:bg-green-500"
+            className="px-3 py-1 disabled:opacity-50 hover:cursor-pointer hover:bg-green-500 mt-2 p-2 rounded"
             disabled={processing}
           >
             {processing ? 'Guardando…' : 'Guardar'}

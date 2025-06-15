@@ -66,11 +66,23 @@ export interface List {
 export interface Task {
     id: number;
     title: string;
-    description: string;
+    description: string | null;
+    comments: CommentT[];
+    due_date: string | null;
     list: List;
     created_at: string;
     updated_at: string;
     done: boolean;
     position: number;
+    [key: string]: unknown;
+}
+
+export interface CommentT {
+    id: number;
+    content: string;
+    user: User;
+    task: Task;
+    created_at: string;
+    updated_at: string;
     [key: string]: unknown;
 }

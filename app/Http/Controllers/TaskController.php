@@ -64,6 +64,7 @@ class TaskController extends Controller
             'title' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'done' => 'nullable|boolean',
+            'due_date' => 'nullable|date',
         ]);
 
         $task->update($data);

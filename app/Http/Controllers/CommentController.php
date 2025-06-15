@@ -31,9 +31,15 @@ class CommentController extends Controller
     public function store(Request $request, Task $task)
     {
         $data = $request->validate(['content' => 'required|string']);
-        $comment = $task->comments()->create($data);
-        return response()->json($comment, 201);
+
+        $task->comments()->create([
+            'content' => $data['content'],
+            'user_id' => auth()->id(),
+        ]);
+
+        return redirect()->back()->with('success', 'Comentario creado');
     }
+
 
     /**
      * Display the specified resource.
@@ -56,7 +62,7 @@ class CommentController extends Controller
      */
     public function update(Request $request, Comment $comment)
     {
-        $data = $request->validate(['content'=> 'required|string']);
+        $data = $request->validate(['content' => 'required|string']);
         $comment->update($data);
         return response()->json($comment);
     }
@@ -66,7 +72,14 @@ class CommentController extends Controller
      */
     public function destroy(Comment $comment)
     {
+        // (opcional) puedes verificar si el usuario es el dueño o es admin
+        if (auth()->id() !== $comment->user_id && !auth()->user()?->is_admin) {
+            abort(403);
+        }
+
         $comment->delete();
-        return response()->json(null,204);
+
+        return redirect()->back()->with('success', 'Comentario eliminado');
     }
+
 }

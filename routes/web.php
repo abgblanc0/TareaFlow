@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\TaskListController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -34,13 +35,15 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('lists/{taskList}', [TaskListController::class, 'destroy'])->name('lists.destroy');
     Route::put('lists/{taskList}/reorder', [TaskListController::class, 'reorder'])->name('lists.reorder');
 
-
-
     // Ruta de tareas
     Route::put('tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
     Route::delete('tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
     Route::post('{taskList}/tasks', [TaskController::class, 'store'])->name('tasks.store');
     Route::put('tasks/{task}/move', [TaskController::class, 'move'])->name('tasks.move');
+
+    // Ruta de comentarios
+    Route::post('tasks/{task}/comments', [CommentController::class, 'store'])->name('comments.store');
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 });
 
 
