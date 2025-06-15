@@ -47,6 +47,7 @@ export interface Board {
     title: string;
     description: string;
     user: User;
+    users: User[];
     lists: List[];
     created_at: string;
     updated_at: string;

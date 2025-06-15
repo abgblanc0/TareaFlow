@@ -1,3 +1,4 @@
+import BoardHeader from '@/components/board/BoardHeader';
 import ListCard from '@/components/ListCard';
 import ListForm from '@/components/ListForm';
 import AppLayout from '@/layouts/app-layout';
@@ -7,8 +8,8 @@ import { useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
-    title: 'Dashboard',
-    href: '/dashboard',
+    title: 'Mis tableros',
+    href: '/boards',
   },
 ];
 
@@ -19,6 +20,7 @@ export default function Index() {
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title={board.title} />
+      <BoardHeader board={board} />
       <div className="p-6">
         <div className="flex gap-2 overflow-x-auto">
           {board.lists.map((list) => (

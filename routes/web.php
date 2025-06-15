@@ -29,6 +29,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('boards/{board}', [BoardController::class, 'show'])->name('boards.show');
     Route::post('boards', [BoardController::class, 'store'])->name('boards.store');
     Route::delete('boards/{board}', [BoardController::class, 'destroy'])->name('boards.destroy');
+    Route::post('/boards/{board}/invite', [BoardController::class, 'invite'])->name('boards.invite');
 
     // Ruta de listas
     Route::post('{board}/lists', [TaskListController::class, 'store'])->name('lists.store');

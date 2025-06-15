@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Board;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Inertia\Inertia;
@@ -17,9 +18,10 @@ class BoardController extends Controller
     {
         $user = auth()->user();
         $boards = $user->boards()->get();
-
+        $shared = $user->sharedBoards()->get();
         return Inertia::render('Boards/Index', [
             'boards' => $boards,
+            'shared' => $shared
         ]);
     }
 
@@ -41,7 +43,8 @@ class BoardController extends Controller
             'description' => 'nullable|string',
         ]);
 
-        $request->user()->boards()->create($data);
+        $board = $request->user()->boards()->create($data);
+        $board->users()->attach(auth()->id());
         return redirect()->route('boards');
     }
 
@@ -51,9 +54,10 @@ class BoardController extends Controller
     public function show(Board $board)
     {
         $this->authorize('view', $board);
-        $board->load('lists.tasks');
+        $board->load('lists.tasks.comments.user');
+        $board->load('users');
         return Inertia::render('Boards/Show', [
-            'board'=> $board,
+            'board' => $board,
         ]);
     }
 
@@ -89,4 +93,36 @@ class BoardController extends Controller
         $board->delete();
         return redirect()->route('boards');
     }
+
+    public function addUser(Request $request, Board $board)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!$board->users->contains($user->id)) {
+            $board->users()->attach($user->id);
+        }
+
+        return back()->with('success', 'Colaborador añadido');
+    }
+
+    public function invite(Request $request, Board $board)
+    {
+        $data = $request->validate([
+            'email' => 'required|email|exists:users,email',
+        ]);
+
+        $user = User::where('email', $data['email'])->first();
+
+        // Evita duplicados
+        if (!$board->users()->where('user_id', $user->id)->exists()) {
+            $board->users()->attach($user->id);
+        }
+
+        return redirect()->back()->with('success', 'Usuario invitado');
+    }
+
 }

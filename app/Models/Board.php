@@ -25,7 +25,7 @@ class Board extends Model
         return $this->hasMany(TaskList::class);
     }
 
-    public function collaborators()
+    public function users()
     {
         return $this->belongsToMany(User::class, 'board_user');
     }

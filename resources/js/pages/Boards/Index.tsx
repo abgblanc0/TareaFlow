@@ -15,7 +15,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 export default function Index() {
     const [showAddModal, setShowAddModal] = useState(false);
 
-    const { boards } = usePage<{ boards: Board[] }>().props;
+    const { boards, shared } = usePage<{ boards: Board[]; shared: Board[] }>().props;
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Mis tableros" />
@@ -34,6 +34,16 @@ export default function Index() {
                     Crear tablero
                 </button>
                 {showAddModal && <BoardForm onClose={() => setShowAddModal(false)} />}
+            </div>
+
+            <div className='m-5'>
+                <h2>Tableros compartidos</h2>
+                <div className='flex gap-4 flex-wrap'>
+                    {shared.length === 0 && <p>No tienes tableros compartidos.</p>}
+                    {shared.map((board) => (
+                        <BoardCard key={board.id} board={board} />
+                    ))}
+                </div>
             </div>
         </AppLayout>
     );

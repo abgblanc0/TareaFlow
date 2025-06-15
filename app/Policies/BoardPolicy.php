@@ -19,9 +19,9 @@ class BoardPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Board $board): bool
+    public function view(User $user, Board $board)
     {
-        return $board->user_id === $user->id;
+        return $board->users->contains($user->id) || $user->id === $board->user_id;
     }
 
     /**

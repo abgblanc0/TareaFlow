@@ -47,15 +47,18 @@ class User extends Authenticatable
         ];
     }
 
-    public function boards(){
+    public function boards()
+    {
         return $this->hasMany(Board::class);
     }
 
-    public function comments(){
+    public function comments()
+    {
         return $this->hasMany(Comment::class);
     }
-    
-    public function sharedBoards(){
-        return $this->belongsTo(Board::class, 'board_user');
+
+    public function sharedBoards()
+    {
+        return $this->belongsToMany(Board::class, 'board_user');
     }
 }
