@@ -61,7 +61,7 @@ class TaskController extends Controller
     public function update(Request $request, Task $task)
     {
         $data = $request->validate([
-            'title'=> 'nullable|string|max:255',
+            'title' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'done' => 'nullable|boolean',
         ]);
@@ -69,7 +69,6 @@ class TaskController extends Controller
         $task->update($data);
 
         return redirect()->back();
-
     }
 
     /**
@@ -79,5 +78,20 @@ class TaskController extends Controller
     {
         $task->delete();
         return redirect()->back();
+    }
+
+    public function move(Request $request, Task $task)
+    {
+        $request->validate([
+            'task_list_id' => 'required|exists:task_lists,id',
+            'position' => 'required|integer',
+        ]);
+
+        $task->update([
+            'task_list_id' => $request->task_list_id,
+            'position' => $request->position,
+        ]);
+
+        return redirect()->back()->with('success', 'Tarea movida');
     }
 }

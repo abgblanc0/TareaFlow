@@ -14,6 +14,7 @@ class Task extends Model
         'description',
         'done',
         'task_list_id',
+        'position',
     ];
 
     public function taskList()
