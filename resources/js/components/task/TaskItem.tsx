@@ -10,7 +10,8 @@ export default function TaskItem({ task, id }: {
   task: Task, id: string
 }) {
   const [showModal, setShowModal] = useState(false);
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
+
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id,
     data: {
       type: 'task',
@@ -25,6 +26,28 @@ export default function TaskItem({ task, id }: {
     transition,
   };
 
+  if (isDragging) {
+    const element = document.querySelector(`[task-id="${task.id}"]`);
+    const rect = element?.getBoundingClientRect();
+
+    console.log(rect);
+    const style = {
+      transform: CSS.Transform.toString(transform),
+      transition,
+      width: rect?.width,
+      height: rect?.height
+    };
+
+    return (
+      <div
+        ref={setNodeRef}
+        style={style}
+        className="bg-black p-3 rounded-lg shadow-sm border-2 border-rose-500 list-none opacity-50"
+      >
+      </div>
+    );
+  }
+
   const toggleDone = () => {
     router.put(route('tasks.update', task.id), { done: !task.done });
   };
@@ -32,23 +55,22 @@ export default function TaskItem({ task, id }: {
   return (
     <div>
       <ul
+        task-id={task.id}
         ref={setNodeRef}
         style={style}
-        key={task.id}
-        className={`bg-black p-2 rounded-lg shadow-sm border list-none flex flex-col justify-between gap-2 hover:border-white cursor-pointer ${task.done ? 'opacity-50 line-through' : ''
+        {...attributes}
+        {...listeners}
+        className={`bg-black p-3 rounded-lg shadow-sm border list-none flex flex-col justify-between gap-2 hover:border-white cursor-grab ${task.done ? 'opacity-50 line-through' : ''
           }`}
         onClick={() => setShowModal(true)}
       >
         <div className="flex items-center gap-2">
-          <div {...attributes} {...listeners} className="cursor-grab text-gray-400 hover:text-white">
-            <GripVertical size={16} />
-          </div>
           <button
             onClick={(e) => {
-              e.stopPropagation();
               toggleDone();
+              e.stopPropagation();
             }}
-            className={`rounded-full w-5 h-5 flex-shrink-0 border-2 cursor-pointer ${task.done ? 'bg-green-500 border-green-500' : 'bg-white border-gray-400'
+            className={`rounded-full w-5 h-5 flex-shrink-0 border-2 hover:cursor-pointer ${task.done ? 'bg-green-500 border-green-500' : 'bg-white border-gray-400'
               }`}
             aria-label="Marcar como hecho"
           />
@@ -56,7 +78,7 @@ export default function TaskItem({ task, id }: {
             {task.title}
           </div>
           <button
-            className="hover:text-red-600 ml-2"
+            className="hover:text-red-600 ml-2 hover:cursor-pointer"
             onClick={(e) => {
               e.stopPropagation();
               router.delete(route('tasks.destroy', task.id));
