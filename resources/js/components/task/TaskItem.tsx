@@ -39,7 +39,6 @@ export default function TaskItem({ task, id }: {
           }`}
         onClick={() => setShowModal(true)}
       >
-        {/* Parte superior: iconos y título */}
         <div className="flex items-center gap-2">
           <div {...attributes} {...listeners} className="cursor-grab text-gray-400 hover:text-white">
             <GripVertical size={16} />

@@ -33,6 +33,7 @@ class TaskController extends Controller
         $data = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'position' => 'required|integer',
         ]);
 
         $taskList->tasks()->create($data);

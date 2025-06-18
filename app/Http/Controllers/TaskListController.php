@@ -36,6 +36,7 @@ class TaskListController extends Controller
     {
         $data = $request->validate([
             'title' => 'required|string|max:255',
+            'position' => 'required|integer',
         ]);
 
         // Asignamos el board_id automáticamente

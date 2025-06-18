@@ -67,6 +67,9 @@ export default function Index() {
     if (event.active.data.current?.type === 'list') {
       setActiveList(event.active.data.current.list);
     }
+    else {
+      setActiveList(null);
+    }
   }
 
 

@@ -59,6 +59,7 @@ export interface List {
     title: string;
     board: Board;
     tasks: Task[];
+    position: number;
     created_at: string;
     updated_at: string;
     [key: string]: unknown;
