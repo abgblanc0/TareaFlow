@@ -10,7 +10,7 @@ export default function TaskItem({ task }: {
   task: Task
 }) {
   const [showModal, setShowModal] = useState(false);
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: task.id,
   });
 

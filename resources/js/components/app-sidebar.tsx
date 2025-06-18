@@ -14,6 +14,11 @@ const mainNavItems: NavItem[] = [
         href: '/boards',
         icon: LayoutGrid,
     },
+    {
+        title: 'Mi calendario',
+        href: '/calendar',
+        icon: BookOpen,
+    }
 ];
 
 const footerNavItems: NavItem[] = [

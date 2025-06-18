@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\BoardController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\CalendarController;
 
 Route::get('/', function () {
     return Inertia::render('welcome');
@@ -45,6 +46,8 @@ Route::middleware(['auth'])->group(function () {
     // Ruta de comentarios
     Route::post('tasks/{task}/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+
+    Route::get('/calendar', [CalendarController::class, 'index'])->name('calendar');
 });
 
 
