@@ -45,7 +45,7 @@ class BoardController extends Controller
 
         $board = $request->user()->boards()->create($data);
         $board->users()->attach(auth()->id());
-        return redirect()->route('boards');
+        return redirect()->back()->with('success', 'Tablero creado');
     }
 
     /**
@@ -125,4 +125,19 @@ class BoardController extends Controller
         return redirect()->back()->with('success', 'Usuario invitado');
     }
 
+    public function reorder(Request $request, Board $board)
+    {
+        $data = $request->validate([
+            'lists' => 'required|array',
+        ]);
+
+        foreach ($data['lists'] as $listData) {
+            $list = $board->lists()->find($listData['id']);
+            if ($list) {
+                $list->update(['position' => $listData['position']]);
+            }
+        }
+
+        return redirect()->back()->with('success', 'Listas reordenadas');
+    }
 }

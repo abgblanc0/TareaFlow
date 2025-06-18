@@ -78,21 +78,7 @@ class TaskController extends Controller
     public function destroy(Task $task)
     {
         $task->delete();
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Tarea eliminada');
     }
 
-    public function move(Request $request, Task $task)
-    {
-        $request->validate([
-            'task_list_id' => 'required|exists:task_lists,id',
-            'position' => 'required|integer',
-        ]);
-
-        $task->update([
-            'task_list_id' => $request->task_list_id,
-            'position' => $request->position,
-        ]);
-
-        return redirect()->back()->with('success', 'Tarea movida');
-    }
 }

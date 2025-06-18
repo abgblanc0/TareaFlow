@@ -30,7 +30,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('boards/{board}', [BoardController::class, 'show'])->name('boards.show');
     Route::post('boards', [BoardController::class, 'store'])->name('boards.store');
     Route::delete('boards/{board}', [BoardController::class, 'destroy'])->name('boards.destroy');
-    Route::post('/boards/{board}/invite', [BoardController::class, 'invite'])->name('boards.invite');
+    Route::post('boards/{board}/invite', [BoardController::class, 'invite'])->name('boards.invite');
+    Route::put('boards/{board}/reorder', [BoardController::class, 'reorder'])->name('boards.reorder');
 
     // Ruta de listas
     Route::post('{board}/lists', [TaskListController::class, 'store'])->name('lists.store');
@@ -41,13 +42,12 @@ Route::middleware(['auth'])->group(function () {
     Route::put('tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
     Route::delete('tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
     Route::post('{taskList}/tasks', [TaskController::class, 'store'])->name('tasks.store');
-    Route::put('tasks/{task}/move', [TaskController::class, 'move'])->name('tasks.move');
 
     // Ruta de comentarios
     Route::post('tasks/{task}/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
-    Route::get('/calendar', [CalendarController::class, 'index'])->name('calendar');
+    Route::get('calendar', [CalendarController::class, 'index'])->name('calendar');
 });
 
 

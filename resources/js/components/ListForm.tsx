@@ -1,19 +1,19 @@
+import { Board } from '@/types';
 import { useForm, router } from '@inertiajs/react';
 
 
 interface ListFormProps {
-  board_id: number;
+  board: Board;
   onClose: () => void;
 }
 
-export default function ListForm({ board_id, onClose }: ListFormProps) {
-  console.log("el board id es: " + board_id);
+export default function ListForm({ board, onClose }: ListFormProps) {
   const { data, setData, processing, errors, reset } = useForm({
     title: '',
   });
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    router.post(route('lists.store', { board: board_id }), { title: data.title });
+    router.post(route('lists.store', { board: board.id }), { title: data.title, position: board.lists.length });
     reset();
     onClose();
   };

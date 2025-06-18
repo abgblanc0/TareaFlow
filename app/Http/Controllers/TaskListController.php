@@ -70,7 +70,7 @@ class TaskListController extends Controller
         ]);
 
         $taskList->update($data);
-        return response()->json($taskList);
+        return redirect()->with('success', 'Lista actualizada');
     }
 
     /**
@@ -92,6 +92,5 @@ class TaskListController extends Controller
 
         return redirect()->back()->with('success', 'Lista reordenada');
     }
-
 
 }

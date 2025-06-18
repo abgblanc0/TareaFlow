@@ -30,11 +30,21 @@ export default function ListCard({ list }: { list: List }) {
   };
 
   if (isDragging) {
+    const element = document.querySelector(`[data-id="${list.id}"]`);
+    const rect = element?.getBoundingClientRect();
+
+    const style = {
+      transform: CSS.Transform.toString(transform),
+      transition,
+      width: rect?.width,
+      height: rect?.height
+    };
+
     return (
       <div
         ref={setNodeRef}
         style={style}
-        className="bg-zinc-800 p-2 rounded-lg shadow w-64 flex flex-col h-full opacity-40 border-2 border-rose-500"
+        className="bg-zinc-800 p-2 rounded-lg shadow w-64 flex flex-col opacity-40 border-2 border-rose-500"
       >
       </div>
     )
@@ -42,6 +52,7 @@ export default function ListCard({ list }: { list: List }) {
 
   return (
     <div
+      data-id={`${list.id}`}
       ref={setNodeRef}
       style={style}
       className="bg-zinc-800 p-2 rounded-lg shadow w-64 flex flex-col"

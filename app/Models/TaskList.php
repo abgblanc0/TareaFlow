@@ -12,6 +12,7 @@ class TaskList extends Model
     protected $fillable = [
         'title',
         'board_id',
+        'position',
     ];
 
     public function board()

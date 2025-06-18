@@ -21,6 +21,11 @@ class BoardSeeder extends Seeder
             ->has(
                 TaskList::factory()
                     ->count(3)
+                    ->state(new Sequence(
+                        ['position' => 0],
+                        ['position' => 1],
+                        ['position' => 2],
+                    ))
                     ->has(
                         Task::factory()
                             ->count(5)
