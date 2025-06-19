@@ -23,7 +23,7 @@ export default function CalendarPage({ tasks }: { tasks: Task[] }) {
     return acc;
   }, {} as Record<string, Task[]>);
 
-  const handleOnchange = (v: any) => {
+  const handleOnchange = (v: unknown) => {
     setValue(v as Date);
     setSelectedDate(v as Date);
   };

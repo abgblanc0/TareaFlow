@@ -112,7 +112,6 @@ export default function Index() {
     const isActiveAList = active.data.current?.type === 'list';
     const isOverAList = over.data.current?.type === 'list';
     const isActiveATask = active.data.current?.type === 'task';
-    const isOverATask = over.data.current?.type === 'task';
 
     if (isActiveAList && isOverAList) {
       if (activeId === overId) return;
