@@ -24,8 +24,13 @@ export default function Index() {
   const [activeList, setActiveList] = useState<List | null>(null);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
   const [lists, setLists] = useState<List[]>(board.lists);
-  const [tasks, setTasks] = useState<Task[]>(lists.flatMap((list) => list.tasks));
+  const [tasks, setTasks] = useState<Task[]>(board.lists.flatMap((list) => list.tasks));
   const lists_ids = useMemo(() => lists.map((list) => `list-id:${list.id}`), [lists]);
+
+  useEffect(() => {
+    setLists(board.lists);
+    setTasks(board.lists.flatMap((list) => list.tasks));
+  }, [board.lists]);
 
   useEffect(() => {
     setLists((prevLists) => {
