@@ -37,6 +37,7 @@ Route::middleware(['auth'])->group(function () {
     // Ruta de listas
     Route::post('{board}/lists', [TaskListController::class, 'store'])->name('lists.store');
     Route::delete('lists/{taskList}', [TaskListController::class, 'destroy'])->name('lists.destroy');
+    Route::put('lists/{taskList}', [TaskListController::class, 'update'])->name('lists.update');
 
     // Ruta de tareas
     Route::put('tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');

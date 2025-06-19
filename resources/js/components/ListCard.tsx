@@ -13,6 +13,8 @@ import { CSS } from '@dnd-kit/utilities';
 
 export default function ListCard({ list }: { list: List }) {
   const [showAddModal, setShowAddModal] = useState(false);
+  const [editingTitle, setEditingTitle] = useState(false);
+  const [title, setTitle] = useState(list.title);
   const tasks_ids = useMemo(() => list.tasks.map((task) => `task-id:${task.id}`), [list.tasks]);
 
   const { setNodeRef, listeners, attributes, transform, transition, isDragging } = useSortable({
@@ -22,6 +24,14 @@ export default function ListCard({ list }: { list: List }) {
       list,
     }
   })
+
+  const handleSubmit = (e?: React.FormEvent) => {
+    e?.preventDefault();
+    if (title.trim() && title !== list.title) {
+      router.put(route('lists.update', list.id), { title });
+    }
+    setEditingTitle(false);
+  };
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -56,13 +66,26 @@ export default function ListCard({ list }: { list: List }) {
       style={style}
       className="bg-zinc-800 p-2 rounded-lg shadow w-64 flex flex-col"
     >
-      <h2
-        {...attributes}
-        {...listeners}
-        className="font-semibold text-lg mb-1 p-2 hover:cursor-grab"
-      >
-        {list.title}
-      </h2>
+      {editingTitle ? (
+        <form onSubmit={handleSubmit}>
+          <input
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            onBlur={handleSubmit}
+            autoFocus
+            className="font-semibold text-lg mb-1 p-1 rounded bg-zinc-700 text-white w-full"
+          />
+        </form>
+      ) :
+        <h2
+          {...attributes}
+          {...listeners}
+          onDoubleClick={() => setEditingTitle(true)}
+          className="font-semibold text-lg mb-1 p-2 hover:cursor-grab"
+        >
+          {list.title}
+        </h2>
+      }
 
       <SortableContext items={tasks_ids} strategy={verticalListSortingStrategy} id={list.id.toString()}>
         <div className="flex flex-col gap-1 flex-grow">

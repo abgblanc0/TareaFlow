@@ -71,7 +71,7 @@ class TaskListController extends Controller
         ]);
 
         $taskList->update($data);
-        return redirect()->with('success', 'Lista actualizada');
+        return redirect()->back()->with('success', 'Lista actualizada');
     }
 
     /**
