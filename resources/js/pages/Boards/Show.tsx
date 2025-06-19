@@ -4,7 +4,7 @@ import ListForm from '@/components/ListForm';
 import TaskItem from '@/components/task/TaskItem';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem, type Board, type List, Task } from '@/types';
-import { closestCenter, DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { closestCenter, closestCorners, DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, PointerSensor, rectIntersection, useSensor, useSensors } from '@dnd-kit/core';
 import { arrayMove, horizontalListSortingStrategy, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { Head, router, usePage } from '@inertiajs/react';
 import { act, use, useEffect, useMemo, useState } from 'react';
@@ -60,7 +60,7 @@ export default function Index() {
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <DndContext
-        collisionDetection={closestCenter}
+        collisionDetection={rectIntersection}
         onDragEnd={onDragEnd}
         onDragStart={onDragStart}
         onDragOver={OnDragOver}
@@ -68,7 +68,7 @@ export default function Index() {
       >
         <Head title={board.title} />
         <BoardHeader board={board} />
-        <div className="flex gap-4 m-6 items-start">
+        <div className="flex gap-2 m-6 items-start">
           <SortableContext items={lists_ids} strategy={horizontalListSortingStrategy} id={board.id.toString()}>
             {lists.map((list) => (
               <ListCard key={list.id} list={list} />
