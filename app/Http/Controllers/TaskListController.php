@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\TaskList;
-use App\Models\Task;
 use App\Models\Board;
 use Illuminate\Http\Request;
 use Inertia\Inertia;

@@ -4,10 +4,10 @@ import ListForm from '@/components/ListForm';
 import TaskItem from '@/components/task/TaskItem';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem, type Board, type List, Task } from '@/types';
-import { closestCenter, closestCorners, DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, PointerSensor, rectIntersection, useSensor, useSensors } from '@dnd-kit/core';
-import { arrayMove, horizontalListSortingStrategy, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, PointerSensor, rectIntersection, useSensor, useSensors } from '@dnd-kit/core';
+import { arrayMove, horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable';
 import { Head, router, usePage } from '@inertiajs/react';
-import { act, use, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 const breadcrumbs: BreadcrumbItem[] = [

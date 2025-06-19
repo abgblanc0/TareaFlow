@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { Task } from '@/types';
 import AppLayout from '@/layouts/app-layout';
 import TaskItem from '@/components/task/TaskItem';
-import { BookOpenCheck } from 'lucide-react';
 
 export default function CalendarPage({ tasks }: { tasks: Task[] }) {
   const [value, setValue] = useState<Date | null>(new Date());
