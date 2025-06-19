@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Board;
 use App\Models\User;
+use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Inertia\Inertia;
@@ -125,7 +126,7 @@ class BoardController extends Controller
         return redirect()->back()->with('success', 'Usuario invitado');
     }
 
-    public function reorder(Request $request, Board $board)
+    public function reorderLists(Request $request, Board $board)
     {
         $data = $request->validate([
             'lists' => 'required|array',
@@ -140,4 +141,28 @@ class BoardController extends Controller
 
         return redirect()->back()->with('success', 'Listas reordenadas');
     }
+
+    public function reorderTasks(Request $request, Board $board)
+    {
+        $data = $request->validate([
+            'tasks' => 'required|array',
+            'tasks.*.id' => 'required|integer|exists:tasks,id',
+            'tasks.*.position' => 'required|integer',
+            'tasks.*.list_id' => 'required|integer|exists:task_lists,id',
+        ]);
+
+        foreach ($data['tasks'] as $taskData) {
+            $task = Task::find($taskData['id']);
+
+            if ($task) {
+                $task->update([
+                    'position' => $taskData['position'],
+                    'task_list_id' => $taskData['list_id'],
+                ]);
+            }
+        }
+
+        return redirect()->back()->with('success', 'Tareas reordenadas correctamente.');
+    }
+
 }

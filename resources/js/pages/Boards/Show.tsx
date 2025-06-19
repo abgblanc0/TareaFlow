@@ -7,7 +7,7 @@ import { type BreadcrumbItem, type Board, type List, Task } from '@/types';
 import { closestCenter, DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { arrayMove, horizontalListSortingStrategy, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { Head, router, usePage } from '@inertiajs/react';
-import { use, useEffect, useMemo, useState } from 'react';
+import { act, use, useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -24,12 +24,24 @@ export default function Index() {
   const [activeList, setActiveList] = useState<List | null>(null);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
   const [lists, setLists] = useState<List[]>(board.lists);
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const lists_ids = useMemo(() => lists.map((list) => list.id), [lists]);
+  const [tasks, setTasks] = useState<Task[]>(lists.flatMap((list) => list.tasks));
+  const lists_ids = useMemo(() => lists.map((list) => `list-id:${list.id}`), [lists]);
 
   useEffect(() => {
-    setLists(board.lists);
-  }, [board.lists]);
+    setLists((prevLists) => {
+      const updatedLists = prevLists.map((list) => ({
+        ...list,
+        tasks: tasks.filter((task) => task.task_list_id === list.id),
+      }));
+
+      // Solo actualiza si realmente cambió
+      if (JSON.stringify(prevLists) === JSON.stringify(updatedLists)) {
+        return prevLists;
+      }
+
+      return updatedLists;
+    });
+  }, [board.lists, tasks]);
 
 
   const sensors = useSensors(
@@ -66,7 +78,7 @@ export default function Index() {
           {createPortal(
             <DragOverlay>
               {activeList && <ListCard list={activeList} />}
-              {activeTask && <TaskItem task={activeTask} id={activeTask.toString()} />}
+              {activeTask && <TaskItem task={activeTask} />}
             </DragOverlay>
             , document.body)}
           {showAddModal && <ListForm board={board} onClose={() => setShowAddModal(false)} />}
@@ -79,57 +91,78 @@ export default function Index() {
     if (event.active.data.current?.type === 'list') {
       setActiveList(event.active.data.current.list);
     }
-    else {
-      setActiveList(null);
-    }
     if (event.active.data.current?.type === 'task') {
       setActiveTask(event.active.data.current.task);
     }
-    else {
-      setActiveTask(null);
-    }
   }
-
 
   function onDragEnd(event: DragEndEvent) {
     const { active, over } = event;
+    setActiveTask(null);
+    setActiveList(null);
     if (!over) return;
 
-    const activeListId = active.id;
-    const overListId = over.id;
+    const activeId = Number(String(active.id).split(':')[1]);
+    const overId = Number(String(over.id).split(':')[1]);
+    const isActiveAList = active.data.current?.type === 'list';
+    const isOverAList = over.data.current?.type === 'list';
+    const isActiveATask = active.data.current?.type === 'task';
+    const isOverATask = over.data.current?.type === 'task';
 
-    if (activeListId === overListId) return;
+    if (isActiveAList && isOverAList) {
+      if (activeId === overId) return;
 
-    const activeIndex = lists.findIndex((list) => list.id === activeListId);
-    const overIndex = lists.findIndex((list) => list.id === overListId);
+      const activeIndex = lists.findIndex((list) => list.id === activeId);
+      const overIndex = lists.findIndex((list) => list.id === overId);
+      const updated = arrayMove(lists, activeIndex, overIndex);
+      setLists(updated);
 
-    const updated = arrayMove(lists, activeIndex, overIndex);
-    setLists(updated)
-    router.put(route('boards.reorder', board.id), { lists: updated.map((t, i) => ({ id: t.id, position: i })) });
+      router.put(route('boards.reorderLists', board.id), {
+        lists: updated.map((t, i) => ({ id: t.id, position: i })),
+      });
+    }
+    if (isActiveATask) {
+      router.put(route('boards.reorderTasks', board.id), {
+        tasks: tasks.map((t, i) => ({ id: t.id, position: i, list_id: t.task_list_id }))
+      })
+    }
   }
 
   function OnDragOver(event: DragOverEvent) {
     const { active, over } = event;
-    if (!over) return;
+    if (!over || active.id === over.id) return;
 
-    const activeId = active.id;
-    const overId = over.id;
+    const activeId = Number(String(active.id).split(':')[1]);
+    const overId = Number(String(over.id).split(':')[1]);
 
     if (activeId === overId) return;
 
-    const isActiveATask = active.data.current?.type === 'task';
-    const isOverATask = over.data.current?.type === 'task';
+    const isActiveAtask = active.data.current?.type === 'task';
+    const isOverAtask = over.data.current?.type === 'task';
 
-    console.log(isActiveATask, isOverATask);
-    if (isActiveATask && isOverATask) {
+    // Dropping a task over another task
+    if (isActiveAtask && isOverAtask) {
       setTasks((tasks) => {
-        const activeIndex = tasks.findIndex((task) => task.id === active.id);
-        const overIndex = tasks.findIndex((task) => task.id === over.id);
+        const activeIndex = tasks.findIndex((task) => task.id === activeId);
+        const overIndex = tasks.findIndex((task) => task.id === overId);
 
-        //tasks[activeIndex].list = tasks[overIndex].list;
+        tasks[activeIndex].task_list_id = tasks[overIndex].task_list_id;
 
         return arrayMove(tasks, activeIndex, overIndex);
       })
     }
+
+    const isOverAColumn = over.data.current?.type === 'list';
+
+    // Dropping a task over a column
+    if (isActiveAtask && isOverAColumn) {
+      setTasks((tasks) => {
+        const activeIndex = tasks.findIndex((task) => task.id === activeId);
+        tasks[activeIndex].task_list_id = overId;
+        return arrayMove(tasks, activeIndex, activeIndex);
+      });
+    }
+
   }
+
 }

@@ -31,12 +31,12 @@ Route::middleware(['auth'])->group(function () {
     Route::post('boards', [BoardController::class, 'store'])->name('boards.store');
     Route::delete('boards/{board}', [BoardController::class, 'destroy'])->name('boards.destroy');
     Route::post('boards/{board}/invite', [BoardController::class, 'invite'])->name('boards.invite');
-    Route::put('boards/{board}/reorder', [BoardController::class, 'reorder'])->name('boards.reorder');
+    Route::put('boards/{board}/reorderLists', [BoardController::class, 'reorderLists'])->name('boards.reorderLists');
+    Route::put('boards/{board}/reorderTasks', [BoardController::class, 'reorderTasks'])->name('boards.reorderTasks');
 
     // Ruta de listas
     Route::post('{board}/lists', [TaskListController::class, 'store'])->name('lists.store');
     Route::delete('lists/{taskList}', [TaskListController::class, 'destroy'])->name('lists.destroy');
-    Route::put('lists/{taskList}/reorder', [TaskListController::class, 'reorder'])->name('lists.reorder');
 
     // Ruta de tareas
     Route::put('tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');

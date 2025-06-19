@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -18,7 +17,7 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->integer('position')->default(0);
             $table->boolean('done')->default(false);
-            $table->foreignId('task_list_id')->constrained()->onDelete('cascade');   
+            $table->foreignId('task_list_id')->constrained()->onDelete('cascade');
         });
     }
 

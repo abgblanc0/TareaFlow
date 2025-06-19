@@ -13,10 +13,10 @@ import { CSS } from '@dnd-kit/utilities';
 
 export default function ListCard({ list }: { list: List }) {
   const [showAddModal, setShowAddModal] = useState(false);
-  const tasks_ids = useMemo(() => list.tasks.map((task) => `${list.id}:${task.id}`), [list.tasks]);
+  const tasks_ids = useMemo(() => list.tasks.map((task) => `task-id:${task.id}`), [list.tasks]);
 
   const { setNodeRef, listeners, attributes, transform, transition, isDragging } = useSortable({
-    id: list.id,
+    id: `list-id:${list.id}`,
     data: {
       type: 'list',
       list,
@@ -29,7 +29,7 @@ export default function ListCard({ list }: { list: List }) {
   };
 
   if (isDragging) {
-    const element = document.querySelector(`[data-id="${list.id}"]`);
+    const element = document.querySelector(`[list-id="${list.id}"]`);
     const rect = element?.getBoundingClientRect();
 
     const style = {
@@ -51,7 +51,7 @@ export default function ListCard({ list }: { list: List }) {
 
   return (
     <div
-      data-id={`${list.id}`}
+      list-id={`${list.id}`}
       ref={setNodeRef}
       style={style}
       className="bg-zinc-800 p-2 rounded-lg shadow w-64 flex flex-col"
@@ -70,7 +70,7 @@ export default function ListCard({ list }: { list: List }) {
             <p className="text-sm text-gray-500">No hay tareas</p>
           )}
           {list.tasks.map((task) => (
-            <TaskItem key={task.id} task={task} id={`${list.id}:${task.id}`} />
+            <TaskItem key={task.id} task={task} />
           ))}
         </div>
       </SortableContext>

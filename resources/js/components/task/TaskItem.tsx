@@ -6,13 +6,13 @@ import { GripVertical, Trash2, CalendarOff } from 'lucide-react';
 import { Task } from '@/types';
 import TaskDetail from './TaskDetail';
 
-export default function TaskItem({ task, id }: {
-  task: Task, id: string
+export default function TaskItem({ task }: {
+  task: Task
 }) {
   const [showModal, setShowModal] = useState(false);
 
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
-    id,
+    id: `task-id:${task.id}`,
     data: {
       type: 'task',
       task,
@@ -20,7 +20,6 @@ export default function TaskItem({ task, id }: {
   });
 
   const expired = task.due_date && new Date(task.due_date) < new Date();
-
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
@@ -29,8 +28,6 @@ export default function TaskItem({ task, id }: {
   if (isDragging) {
     const element = document.querySelector(`[task-id="${task.id}"]`);
     const rect = element?.getBoundingClientRect();
-
-    console.log(rect);
     const style = {
       transform: CSS.Transform.toString(transform),
       transition,

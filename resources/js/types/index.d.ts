@@ -71,7 +71,7 @@ export interface Task {
     description: string | null;
     comments: CommentT[];
     due_date: string | null;
-    list: List;
+    task_list_id: number;
     created_at: string;
     updated_at: string;
     done: boolean;
