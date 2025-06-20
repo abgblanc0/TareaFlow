@@ -2,10 +2,11 @@ import { Board } from "@/types";
 import { Plus } from 'lucide-react'
 import { useState } from "react";
 import InviteUserModal from "./InviteUserModal";
+import { usePage } from "@inertiajs/react";
 
 export default function BoardHeader({ board }: { board: Board }) {
   const [showInvite, setShowInvite] = useState(false);
-
+  const { auth } = usePage<{ auth: { user: { id: number } } }>().props;
 
   return (
     <div className="flex items-center gap-4 m-4">
@@ -28,13 +29,16 @@ export default function BoardHeader({ board }: { board: Board }) {
             )}
           </div>
         ))}
-        <button
-          onClick={() => setShowInvite(true)} // esto te abre un modal o algo similar
-          className="rounded-full bg-zinc-700 p-2 hover:bg-green-500"
-          title="Invitar colaborador"
-        >
-          <Plus size={20} />
-        </button>
+        {auth.user.id === board.user_id && (
+
+          <button
+            onClick={() => setShowInvite(true)} // esto te abre un modal o algo similar
+            className="rounded-full bg-zinc-700 p-2 hover:bg-green-500"
+            title="Invitar colaborador"
+          >
+            <Plus size={20} />
+          </button>
+        )}
       </div>
       {showInvite && <InviteUserModal boardId={board.id} onClose={() => setShowInvite(false)} />}
     </div>
