@@ -1,11 +1,13 @@
 import { useState } from 'react';
-import { router } from '@inertiajs/react';
+import { router, usePage } from '@inertiajs/react';
 import { Task } from '@/types';
 import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale';
 
 export default function Comments({ task }: { task: Task }) {
   const [content, setContent] = useState('');
+
+  const { auth } = usePage<{ auth: { user: { id: number } } }>().props;
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,15 +55,17 @@ export default function Comments({ task }: { task: Task }) {
                 {formatDistanceToNow(new Date(c.created_at), { addSuffix: true, locale: es })}
               </div>
               <div className="bg-zinc-800 p-2 rounded mt-1 text-sm">{c.content}</div>
-              <div className="text-xs mt-1 text-blue-400 space-x-3 cursor-pointer">
-                <button className="hover:underline">Editar</button>
-                <button
-                  onClick={() => router.delete(route('comments.destroy', c.id))}
-                  className="text-red-500 hover:underline"
-                >
-                  Eliminar
-                </button>
-              </div>
+              {
+                c.user_id === auth.user.id && <div className="text-xs mt-1 text-blue-400 space-x-3 cursor-pointer">
+                  <button className="hover:underline">Editar</button>
+                  <button
+                    onClick={() => router.delete(route('comments.destroy', c.id))}
+                    className="text-red-500 hover:underline"
+                  >
+                    Eliminar
+                  </button>
+                </div>
+              }
             </div>
           </div>
         ))}

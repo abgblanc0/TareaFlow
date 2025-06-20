@@ -2,7 +2,7 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { useState } from 'react';
 import { router } from '@inertiajs/react';
-import { GripVertical, Trash2, CalendarOff } from 'lucide-react';
+import { Trash2, CalendarOff } from 'lucide-react';
 import { Task } from '@/types';
 import TaskDetail from './TaskDetail';
 
