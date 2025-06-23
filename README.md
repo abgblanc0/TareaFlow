@@ -86,7 +86,7 @@ TareaFlow es una aplicación web para la gestión colaborativa de tareas y proye
 1. **Clonar el repositorio**
 
 ```bash
-git clone https://github.com/tu-usuario/tareaflow.git
+git clone https://github.com/abgblanc0/tareaflow.git
 cd tareaflow
 
 2. Instalar dependencias
