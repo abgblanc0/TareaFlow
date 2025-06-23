@@ -15,16 +15,48 @@ TareaFlow es una aplicación web para la gestión colaborativa de tareas y proye
 
 ---
 
-## 🌐 Rutas principales
+## 📚 Rutas del proyecto
 
-| Ruta                         | Descripción                                         |
-|------------------------------|-----------------------------------------------------|
-| `/login`                    | Iniciar sesión                                      |
-| `/register`                 | Registro de nuevo usuario                           |
-| `/boards`                   | Página de tableros del usuario                      |
-| `/boards/{id}`              | Ver un tablero (listas y tareas)                    |
-| `/calendar`                 | Vista de calendario con tareas asignadas           |
-| `/settings/profile`         | Configuración de perfil (nombre, email, avatar)     |
+### 🔹 Tableros
+
+| Método | Ruta                                       | Descripción                                         |
+|--------|--------------------------------------------|-----------------------------------------------------|
+| GET    | `/boards`                                  | Lista los tableros del usuario                      |
+| GET    | `/boards/{board}`                          | Muestra un tablero específico                       |
+| POST   | `/boards`                                  | Crea un nuevo tablero                               |
+| DELETE | `/boards/{board}`                          | Elimina un tablero                                  |
+| POST   | `/boards/{board}/invite`                   | Invita a otro usuario al tablero                    |
+| PUT    | `/boards/{board}/reorderLists`             | Reordena las listas de un tablero                   |
+| PUT    | `/boards/{board}/reorderTasks`             | Reordena y mueve tareas entre listas                |
+
+### 🔹 Listas
+
+| Método | Ruta                     | Descripción                             |
+|--------|--------------------------|-----------------------------------------|
+| POST   | `/{board}/lists`         | Crea una nueva lista en un tablero      |
+| PUT    | `/lists/{taskList}`      | Actualiza el título de una lista        |
+| DELETE | `/lists/{taskList}`      | Elimina una lista                       |
+
+### 🔹 Tareas
+
+| Método | Ruta                      | Descripción                             |
+|--------|---------------------------|-----------------------------------------|
+| POST   | `/{taskList}/tasks`       | Crea una nueva tarea en una lista       |
+| PUT    | `/tasks/{task}`           | Edita una tarea existente               |
+| DELETE | `/tasks/{task}`           | Elimina una tarea                       |
+
+### 🔹 Comentarios
+
+| Método | Ruta                          | Descripción                     |
+|--------|-------------------------------|---------------------------------|
+| POST   | `/tasks/{task}/comments`      | Añade un comentario a una tarea |
+| DELETE | `/comments/{comment}`         | Elimina un comentario propio    |
+
+### 🔹 Calendario
+
+| Método | Ruta         | Descripción                             |
+|--------|--------------|-----------------------------------------|
+| GET    | `/calendar`  | Muestra tareas en vista calendario      |
 
 ---
 
@@ -48,7 +80,6 @@ TareaFlow es una aplicación web para la gestión colaborativa de tareas y proye
 - Composer
 - Laravel CLI
 - Base de datos (MySQL o PostgreSQL)
-- Cuenta gratuita en Cloudinary (opcional pero recomendado)
 
 ### Instrucciones
 
