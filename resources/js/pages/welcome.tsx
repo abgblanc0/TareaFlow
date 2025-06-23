@@ -10,8 +10,8 @@ export default function Welcome() {
                 <link rel="preconnect" href="https://fonts.bunny.net" />
                 <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
             </Head>
-            <div className="flex min-h-screen flex-col items-center bg-[#FDFDFC] p-6 text-[#1b1b18] lg:justify-center lg:p-8 dark:bg-[#0a0a0a]">
-                <nav className="flex items-center justify-end gap-4">
+            <div className="flex min-h-screen flex-col bg-[#FDFDFC] text-[#1b1b18] dark:bg-[#0a0a0a]">
+                <nav className="flex items-center justify-end gap-4 p-6">
                     {auth.user ? (
                         <Link
                             href={route('boards')}
@@ -36,6 +36,15 @@ export default function Welcome() {
                         </>
                     )}
                 </nav>
+                <main className="flex flex-1 flex-col items-center justify-center gap-8 p-6 text-center text-emerald-200">
+                    <h1 className="text-4xl font-bold">TareaFlow</h1>
+                    <p className="max-w-xl text-lg">Organiza tus tareas y colabora con tu equipo desde cualquier lugar.</p>
+                    <ul className="grid gap-2 text-left">
+                        <li>• Organiza tus tareas en tableros y listas</li>
+                        <li>• Comparte tableros con tus compañeros</li>
+                        <li>• Consulta el calendario para ver tus fechas límite</li>
+                    </ul>
+                </main>
             </div>
         </>
     );
