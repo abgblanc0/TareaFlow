@@ -1,37 +1,84 @@
+# 🧠 TareaFlow
 
-# TareaFlow
+TareaFlow es una aplicación web para la gestión colaborativa de tareas y proyectos, al estilo de Trello. Permite crear tableros, añadir listas y tareas, asignar fechas, subir imágenes, colaborar en equipo y visualizar tareas en un calendario.
 
-Una web para administrarse con listas de tareas
+## 🚀 Características principales
 
-## Correr Localmente
+- ✅ Registro e inicio de sesión de usuarios
+- 🧑‍🤝‍🧑 Creación de tableros personales y compartidos
+- 📋 Listas de tareas ordenables por drag & drop
+- ✅ Tareas con descripciones, fechas límite, comentarios e imágenes
+- 🗓️ Vista de calendario con tareas por fecha
+- 🖼️ Subida de avatares de usuario vía Cloudinary
+- 🔒 Roles básicos: creador y colaboradores
+- 📦 Comentarios editables y eliminables por su autor
 
-Clonar el proyecto
+---
+
+## 🌐 Rutas principales
+
+| Ruta                         | Descripción                                         |
+|------------------------------|-----------------------------------------------------|
+| `/login`                    | Iniciar sesión                                      |
+| `/register`                 | Registro de nuevo usuario                           |
+| `/boards`                   | Página de tableros del usuario                      |
+| `/boards/{id}`              | Ver un tablero (listas y tareas)                    |
+| `/calendar`                 | Vista de calendario con tareas asignadas           |
+| `/settings/profile`         | Configuración de perfil (nombre, email, avatar)     |
+
+---
+
+## 🛠️ Tecnologías utilizadas
+
+- ⚙️ **Backend:** Laravel 10 / 12 (PHP 8.2+)
+- 🧠 **Frontend:** React + Inertia.js
+- 🎨 **UI:** TailwindCSS + HeadlessUI + ShadCN
+- 📦 **DND:** dnd-kit para drag & drop
+- 🗃️ **Base de datos:** PostgreSQL o MySQL
+- ☁️ **Almacenamiento de imágenes:** Cloudinary
+
+---
+
+## 🧪 ¿Cómo ejecutar el proyecto?
+
+### Requisitos
+
+- PHP 8.2+
+- Node.js y npm
+- Composer
+- Laravel CLI
+- Base de datos (MySQL o PostgreSQL)
+- Cuenta gratuita en Cloudinary (opcional pero recomendado)
+
+### Instrucciones
+
+1. **Clonar el repositorio**
 
 ```bash
-  git clone https://github.com/abgblanc0/TareaFlow
-  cd TareaFlow
-```
+git clone https://github.com/tu-usuario/tareaflow.git
+cd tareaflow
 
-Instalar dependencias y Laravel
-```bash
-  npm install && npm run build
-  composer global require laravel/installer
-```
-IMPORTANTE Crear el .env (copiar el de ejemplo y rellenar)
+2. Instalar dependencias
 
-Poner en DB_CONNECTION=pgsql
+composer install
+npm install
 
-Y rellenar info de la bbdd
+3. Configurar el entorno
 
+cp .env.example .env
+php artisan key:generate
 
-Corremos las migraciones y si queremos rellenamos la bbdd con datos aleatorios:
+Completa en .env tus datos de conexión a base de datos
 
-```bash
-  php artisan migrate
-  php artisan db:seed // Las factories llenan de datos la bbdd, opcional
-```
+DB_DATABASE=tareaflow
+DB_USERNAME=root
+DB_PASSWORD=
 
-Ahora si abrimos el server:
-```bash
-  composer run dev
-```
+4. Migrar la base de datos y llenarla
+
+php artisan migrate
+php artisan db:seed
+
+5. Correr servidor
+
+Composer run dev
