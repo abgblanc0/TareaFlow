@@ -57,5 +57,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::delete('admin/users/{user}', [AdminUserController::class, 'destroy'])->name('admin.users.destroy');
 });
 
+Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
+    Route::post('users', [AdminUserController::class, 'store'])->name('admin.users.store');   // 👈 POST
+});
+
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';
